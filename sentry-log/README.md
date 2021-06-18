@@ -10,8 +10,18 @@ Adds support for automatic Breadcrumb and Event capturing from logs.
 
 The `log` crate is supported in two ways. First, logs can be captured as
 breadcrumbs for later. Secondly, error logs can be captured as events to
-Sentry. By default anything above `Info` is recorded as breadcrumb and
+Sentry. By default anything above `Info` is recorded as a breadcrumb and
 anything above `Error` is captured as error event.
+
+## Setup
+`log` requires additional setup in order to properly emit logged lines:
+
+```rust
+let mut log_builder = pretty_env_logger::formatted_builder();
+let logger = sentry_log::SentryLogger::with_dest(log_builder.build());
+log::set_boxed_logger(Box::new(logger)).unwrap();
+let _sentry = sentry::init(());
+```
 
 ## Examples
 
